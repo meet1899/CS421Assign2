@@ -26,6 +26,12 @@ void printum(unordered_map<int, vector<int>> um){
         
 }
 
+int random_vec(vector<int> vec){
+    int randomIndex = rand() % vec.size();
+
+    return vec[randomIndex];
+}
+
 vector<int> genVariables(int n){
     vector<int> V;
     for(int i= 0; i < n; ++i){
@@ -51,21 +57,7 @@ map< vector<int>, vector<int> > genconstrains(int n, float p, float r, float alp
     
     int conquan = round(r * n * log(n));
     unordered_map<int, vector<int>> var_constrains;
-
+    
 
     return ;
-}
-    
-int random_vec(vector<int> vec){
-    vector<int> O;
-    size_t nelems = 1;
-    sample(
-        vec.begin(),
-        vec.end(),
-        back_inserter(O),
-        nelems,
-        mt19937{random_device{}()}
-    );
-
-    return vec[0];
 }
