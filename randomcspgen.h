@@ -6,6 +6,7 @@
 #include <cmath>
 #include <random>
 #include <algorithm>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -23,13 +24,62 @@ void printum(unordered_map<int, vector<int>> um){
         printV(v);
         cout << endl;
     }
-        
+}
+
+void print_pair(pair<int, int> pair){
+    cout << "("<<pair.first << ": " << pair.second << ")";
+}
+
+void print_vpair(vector<pair<int,int> > vp){
+    for (int i = 0; i < vp.size(); i++){
+        print_pair(vp[i]);
+        cout << ",";
+    }
+}
+
+void printm(map< pair<int, int>, vector<pair<int,int> > > m){
+    for (auto& p : m){
+        print_pair(p.first);
+        cout << " :: ";
+        print_vpair(p.second);
+        cout<< "\n";
+    }
+
 }
 
 int random_vec(vector<int> vec){
     int randomIndex = rand() % vec.size();
 
     return vec[randomIndex];
+}
+
+bool find(pair<int, int> a, vector<pair<int, int>> b){
+
+    bool c;
+    int key =a.first;
+    auto it = find_if(
+        b.begin(), b.end(),
+        [key](const auto& p) { return p.first == key; });
+
+
+    if (it!=b.end())
+        c = true;
+    else
+        c = false;
+
+    bool e;
+    key =a.second;
+    auto its = find_if(
+        b.begin(), b.end(),
+        [key](const auto& p) { return p.second == key; });
+
+
+    if (its!=b.end() && its == it)
+        e = true;
+    else
+        e = false;
+        
+    return c&&e;
 }
 
 vector<int> genVariables(int n){
@@ -53,11 +103,39 @@ unordered_map<int, vector<int>> genDommains(int n, float alpha, vector<int> V){
     return Domains;
 }
 
-map< vector<int>, vector<int> > genconstrains(int n, float p, float r, float alpha, vector<int> V, unordered_map<int, vector<int>> Domains){
+map< pair<int, int>, vector<pair<int,int> > > genconstrains(int n, float p, float r, float alpha, vector<int> V, unordered_map<int, vector<int>> Domains){
     
     int conquan = round(r * n * log(n));
-    unordered_map<int, vector<int>> var_constrains;
+    vector< pair<int,int> > var_constrains;
     
+    while(var_constrains.size() <= conquan){
+        int var1 = random_vec(V);
+        int var2 = random_vec(V);
+        pair<int, int> check = {var1,var2};
+        pair<int, int> checknew = {var2,var1};
+        if(var1 != var2 && !find(check, var_constrains) && !find(checknew, var_constrains)){
+            var_constrains.push_back(check) ;
+        }
+    }
+    int d = round(pow(n,alpha));
+    int incomquan = round( p * pow(d,2));
+    map< pair<int, int>, vector<pair<int,int> > > constrains;
 
-    return ;
+    for(auto var : var_constrains){
+        vector< pair<int,int> > incomval;
+        
+        while(incomval.size() <= incomquan ){
+            int val1 = random_vec(Domains[var.first]);
+            int val2 = random_vec(Domains[var.second]);
+            pair<int, int> check = {val1,val2};
+            pair<int, int> checknew = {val2,val1};
+            if(!find(check, incomval) || !find(checknew, incomval)){
+                incomval.push_back(check);
+            }
+        }
+            
+        constrains[var] = incomval;
+    }
+
+    return constrains;
 }

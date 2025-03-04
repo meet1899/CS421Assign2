@@ -25,7 +25,7 @@ vector<int> generate_csp(int n, double p, double alpha, double r) {
         }
         domains[var] = domain;
     }
--
+
     // STEP 1
     // Compute quantity of constrains
     int constrains_qnt = round(r * n * log(n));
