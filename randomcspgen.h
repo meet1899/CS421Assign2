@@ -19,7 +19,7 @@ void printV(vector<int> &v) {
 
 void printum(unordered_map<int, vector<int>> um){
     for(auto it = um.begin(); it != um.end(); it++){
-        cout << it->first << ": " ;
+        cout << it->first << " : " ;
         vector<int> v = it->second;
         printV(v);
         cout << endl;
@@ -27,13 +27,12 @@ void printum(unordered_map<int, vector<int>> um){
 }
 
 void print_pair(pair<int, int> pair){
-    cout << "("<<pair.first << ": " << pair.second << ")";
+    cout << "("<<pair.first << " : " << pair.second << "), ";
 }
 
 void print_vpair(vector<pair<int,int> > vp){
     for (int i = 0; i < vp.size(); i++){
         print_pair(vp[i]);
-        cout << ",";
     }
 }
 
@@ -103,12 +102,17 @@ unordered_map<int, vector<int>> genDommains(int n, float alpha, vector<int> V){
     return Domains;
 }
 
-map< pair<int, int>, vector<pair<int,int> > > genconstrains(int n, float p, float r, float alpha, vector<int> V, unordered_map<int, vector<int>> Domains){
+int domain_size(int n, float alpha){
+    int d = round(pow(n,alpha));
+    return d;
+}
+
+map< pair<int, int>, vector<pair<int,int> > > genconstrains(int n, float p, float r, float alpha, vector<int> V, unordered_map<int, vector<int>> Domains, int &conquan, int &incomquan){
     
-    int conquan = round(r * n * log(n));
+    conquan = round(r * n * log(n));
     vector< pair<int,int> > var_constrains;
     
-    while(var_constrains.size() <= conquan){
+    while(var_constrains.size() != conquan){
         int var1 = random_vec(V);
         int var2 = random_vec(V);
         pair<int, int> check = {var1,var2};
@@ -118,13 +122,13 @@ map< pair<int, int>, vector<pair<int,int> > > genconstrains(int n, float p, floa
         }
     }
     int d = round(pow(n,alpha));
-    int incomquan = round( p * pow(d,2));
+    incomquan = round( p * pow(d,2));
     map< pair<int, int>, vector<pair<int,int> > > constrains;
 
     for(auto var : var_constrains){
         vector< pair<int,int> > incomval;
         
-        while(incomval.size() <= incomquan ){
+        while(incomval.size() < incomquan ){
             int val1 = random_vec(Domains[var.first]);
             int val2 = random_vec(Domains[var.second]);
             pair<int, int> check = {val1,val2};

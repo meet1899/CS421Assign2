@@ -3,35 +3,43 @@
 int main(){
     int n;
     float alpha, p, r;
-    cout << "Enter Number of Variables n: ";
+    cout << "Input parameter: "<<endl;
+    cout << "Number of Variables (n): ";
     cin >> n;
-    cout << "Enter constraint tightness p (0<p<1): ";
+    cout << "Constraint tightness (p): ";
     cin >> p;
-    cout << "Enter value of alpha: ";
+    cout << "Constant alpha: ";
     cin >> alpha;
-    cout << "Enter value of r: ";
+    cout << "Constant r: ";
     cin >> r;
-
-    vector<int> Variables = genVariables(n);
-    //printV(Variables);
-    unordered_map<int, vector<int>> Domains = genDommains(n, alpha, Variables);
-    //printum(Domains);
-
-/*
-    vector<int> V1 = {1,2};
-    vector<int> V2 = {3,4};
-    vector<vector<int>> Var;
-    Var.push_back((V1));
     cout<<endl;
-    for(int i=0; i<Var.size(); ++i){
-        printV(Var[i]);
-        cout<<endl;
-    }
-*/
-    map< pair<int, int>, vector<pair<int,int> > > constrain = genconstrains(n, p, r, alpha, Variables, Domains);
+
+    cout<< "Generated RB Instance" << endl;
+    int Domain_size = domain_size(n, alpha);
+    cout << "Domain Size: " << Domain_size<< endl << endl;
+    
+    vector<int> Variables = genVariables(n);
+    
+    unordered_map<int, vector<int>> Domains = genDommains(n, alpha, Variables);
+    
+    int conquan,incomquan;
+    map< pair<int, int>, vector<pair<int,int> > > constrain = genconstrains(n, p, r, alpha, Variables, Domains, conquan, incomquan);
+    
+    cout << "Number of constraints: " << conquan <<endl<< endl;
+    
+    cout << "Number of incompatible tuples: " << incomquan <<endl<< endl;
+
+    cout << "Variables: ";
+    printV(Variables);
+    cout<<endl;
+
+    cout << "Domains: " <<endl;
+    printum(Domains);
+    cout<<endl;
+
+    cout << "Constrains: "<<endl;
     printm(constrain);
-
-
+    cout<<endl;
 
     return 0;
 }
