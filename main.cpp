@@ -1,4 +1,5 @@
 #include "randomcspgen.h"
+#include "strategies.h"
 
 int main(){
     int n;
@@ -40,6 +41,12 @@ int main(){
     cout << "Constrains: "<<endl;
     printm(constrain);
     cout<<endl;
+
+    vector< pair<int,int> > assignments;
+
+    assignments = BT_sol(Variables, Domains, constrain, assignments);
+
+    printa(assignments);
 
     return 0;
 }
